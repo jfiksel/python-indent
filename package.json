@@ -1,5 +1,5 @@
 {
-  "name": "python-indent",
+  "name": "r-indent",
   "main": "./lib/main",
   "version": "1.0.0",
   "description": "Python PEP8 auto-indentation",
