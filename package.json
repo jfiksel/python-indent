@@ -2,8 +2,8 @@
   "name": "r-indent",
   "main": "./lib/main",
   "version": "1.0.0",
-  "description": "Python PEP8 auto-indentation",
-  "author": "Dustin Speckhals <dustin1114@gmail.com>",
+  "description": "R Script auto-indentation",
+  "author": "Jacob Fiksel <jfiksel@gmail.com>",
   "keywords": [
     "python",
     "indent",
@@ -11,11 +11,13 @@
   ],
   "contributors": [
     {
+      "name": "Jacob Fiksel"
+      "email": "jfiksel@gmail.com"
       "name": "Dustin Speckhals",
       "email": "dustin1114@gmail.com"
     }
   ],
-  "repository": "https://github.com/DSpeckhals/python-indent",
+  "repository": "https://github.com/jfiksel/r-indent",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
