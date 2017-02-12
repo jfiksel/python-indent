@@ -23,12 +23,31 @@ does not recognize.
 This package was made to give you expected indentation behavior; __r-indent__ listens for
 `editor:newline` events in R source files, and when triggered, adjusts the indentation to
 be lined up relative to the opening delimiter of the statement _or_ "hanging" (for parameters,
-tuples, or lists). In addition, this should give you correct indentation
+tuples, or lists).
+
+```r
+f <- function(longarg1,
+              longarg2, # would have to mash space to get longarg2 here
+              longarg3){
+
+            # } <- this is where the closed bracket wants to go
+  #<--properly dedents to here
+}
+```
+
+Without the r-indent package, the second argument would not have been
+indented to line up with the first. In addition, the closed bracket would
+have been lined up with the arguments, since Atom sets the indentation level
+to the second argument after you have mashed the tab/space bar to line
+it up with the first argument.
+
+This package should also give you correct indentation
 if you are piping together ggplot code
 ```r
 plot <-
   ggplot(df) +
   geom_point()
+#<--properly dedents to here
 ```
 
 or using the piping in the dplyr package
@@ -38,69 +57,22 @@ df <-
   df %>%
   select() %>%
   mutate()
+#<--properly dedents to here
 ### Another way
 df <- df %>%
         select() %>%
         mutate()
+#<--properly dedents to here
 ```
 after pressing enter at the end of both of these commands, the r-indent package
 will take your cursor to the indentation of the line that started these
 chained blocks of code, rather than continue with the current indentation.
 
 ### TO DO
-* Update examples below
+* Come up with more examples
 * Update testing
 * Clean up and comment code
 
-### Indent Types
 
-
-  - Aligned with Opening Delimiter
-
-    ```r
-    def function_with_lots_of_params(param_1, param_2,
-                                     param_3, param_4,
-                                     very_long_parameter_name,
-                                     param_6)
-    ```
-  - Hanging
-
-      ```python
-      def function_with_lots_of_params(
-          param_1, param_2,
-          param_3, param_4,
-          very_long_parameter_name,
-          param_6)
-      ```
-
-### Setting
-- __Hanging Indent Tabs__: Number of tabs used for _hanging_ indents
-
-### Examples
-
-```python
-def current_language_python_package(first_parameter, second_parameter,#<newline>
-third_parameter):#<---default Atom language-python
-    pass
-
-def with_python_indent_package_added(first_parameter, second_parameter,
-                                     third_parameter):
-    #<--properly dedents to here
-    pass
-
-def with_hanging_indent(
-    first_parameter, second_parameter, third_parameter):
-    pass
-
-also_works_with_lists = ["apples", "oranges", "pears", "peaches", "mangoes",
-                         "clementines", "etc."]#<--PEP8 continued indentation
-or_like_this = [
-    "apples", "oranges", "pears",
-    "peaches", "mangoes", "clementines",
-    "etc."
-]
-
-```
-
-There are plenty of other examples (ordinary and extraordinary) in the
+There are plenty of other examples for Python (not R yet) (ordinary and extraordinary) in the
 [test_file](https://github.com/DSpeckhals/python-indent/blob/master/spec/test_file.py).
