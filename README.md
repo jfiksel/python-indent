@@ -33,6 +33,12 @@ plot <-
 
 or using the piping in the dplyr package
 ```r
+### One way
+df <-
+  df %>%
+  select() %>%
+  mutate()
+### Another way
 df <- df %>%
         select() %>%
         mutate()
