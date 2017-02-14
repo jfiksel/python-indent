@@ -1,7 +1,7 @@
 "use babel";
 import RIndent from "../lib/r-indent";
 describe("r-indent", () => {
-    const FILE_NAME = "fixture.py";
+    const FILE_NAME = "fixture.R";
     let buffer = null;
     let editor = null;
     let rIndent = null;
@@ -20,8 +20,8 @@ describe("r-indent", () => {
             const packages = atom.packages.getAvailablePackageNames();
             let languagePackage;
 
-            if (packages.indexOf("language-python") > -1) {
-                languagePackage = "language-python";
+            if (packages.indexOf("language-r") > -1) {
+                languagePackage = "language-r";
             } else if (packages.indexOf("MagicPython") > -1) {
                 languagePackage = "MagicPython";
             }
