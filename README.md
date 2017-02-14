@@ -1,4 +1,4 @@
-# r-indent [![Build Status](https://travis-ci.org/DSpeckhals/python-indent.svg?branch=master)](https://travis-ci.org/DSpeckhals/python-indent)
+# r-indent [![Build Status](https://travis-ci.org/jfiksel/r-indent.svg?branch=master)](https://travis-ci.org/jfiksel/r-indent.svg?branch=master)
 
 _Atom with easy indentation for piping R code blocks with dplyr and ggplot2_
 
