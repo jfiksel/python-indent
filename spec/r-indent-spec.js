@@ -20,8 +20,8 @@ describe("r-indent", () => {
             const packages = atom.packages.getAvailablePackageNames();
             let languagePackage;
 
-            if (packages.indexOf("language-r") > -1) {
-                languagePackage = "language-r";
+            if (packages.indexOf("language-python") > -1) {
+                languagePackage = "language-python";
             } else if (packages.indexOf("MagicPython") > -1) {
                 languagePackage = "MagicPython";
             }
