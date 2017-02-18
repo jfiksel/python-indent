@@ -37,7 +37,7 @@ describe("r-indent", () => {
     });
 
     describe("package", () =>
-        it("loads python file and package", () => {
+        it("loads R file and package", () => {
             expect(editor.getPath()).toContain(FILE_NAME);
             expect(atom.packages.isPackageActive("r-indent")).toBe(true);
         })
