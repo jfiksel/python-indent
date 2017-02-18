@@ -8,7 +8,7 @@ describe("r-indent", () => {
 
     beforeEach(() => {
         waitsForPromise(() =>
-            atom.workspace.open("./fixtures/test_file.R").then((ed) => {
+            atom.workspace.open("fixture.py").then((ed) => {
                 editor = ed;
                 editor.setSoftTabs(true);
                 editor.setTabLength(4);
