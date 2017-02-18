@@ -1,7 +1,7 @@
 "use babel";
 import RIndent from "../lib/r-indent";
 describe("r-indent", () => {
-    const FILE_NAME = "./fixtures/test_file.R";
+    const FILE_NAME = "fixture.py";
     let buffer = null;
     let editor = null;
     let rIndent = null;
