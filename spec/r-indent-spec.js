@@ -1,14 +1,14 @@
 "use babel";
 import RIndent from "../lib/r-indent";
 describe("r-indent", () => {
-    const FILE_NAME = './fixtures/test_file.R';
+    // const FILE_NAME = "./fixtures/test_file.R";
     let buffer = null;
     let editor = null;
     let rIndent = null;
 
     beforeEach(() => {
         waitsForPromise(() =>
-            atom.workspace.open(FILE_NAME).then((ed) => {
+            atom.workspace.open("./fixtures/test_file.R").then((ed) => {
                 editor = ed;
                 editor.setSoftTabs(true);
                 editor.setTabLength(4);
