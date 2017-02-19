@@ -100,9 +100,6 @@ describe("r-indent", () => {
                 rIndent.properlyIndent();
                 expect(buffer.lineForRow(2)).toBe(" ".repeat(14));
             });
-
-
-
             /*
             s = "[ will this \"break ( the parsing?"
             */
@@ -111,7 +108,6 @@ describe("r-indent", () => {
                 rIndent.properlyIndent();
                 expect(buffer.lineForRow(1)).toBe("");
             });
-
             /*
             x = ["here(\"(", "is", "a",
                      "list", "of", ["nested]",
