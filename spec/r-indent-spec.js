@@ -11,7 +11,7 @@ describe("r-indent", () => {
             atom.workspace.open(FILE_NAME).then((ed) => {
                 editor = ed;
                 editor.setSoftTabs(true);
-                editor.setTabLength(4);
+                editor.setTabLength(2);
                 buffer = editor.buffer;
             })
         );
@@ -140,7 +140,6 @@ describe("r-indent", () => {
             it("indents normally after function definition", () => {
                 editor.insertText("f <- function(param_a, param_b, param_c){\n");
                 rIndent.properlyIndent();
-                editor.insertText("}");
                 expect(buffer.lineForRow(1)).toBe(" ".repeat(2));
             });
 
@@ -156,13 +155,13 @@ describe("r-indent", () => {
 
                 editor.insertText("param_d){\n");
                 rIndent.properlyIndent();
-                expect(buffer.lineForRow(2)).toBe(" ".repeat(4));
+                expect(buffer.lineForRow(2)).toBe(" ".repeat(2));
             });
 
             /*
-            def test(param_a,
-                     param_b,
-                     param_c):
+            f <- function(param_a,
+                          param_b,
+                          param_c){}
                     pass
             */
             it("keeps indentation on succeding open lines", () => {
