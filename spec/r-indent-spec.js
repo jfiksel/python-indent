@@ -1,14 +1,14 @@
 "use babel";
 import RIndent from "../lib/r-indent";
 describe("r-indent", () => {
-    // const FILE_NAME = "./fixtures/test_file.R";
+    const FILE_NAME = "fixtures/test_file.R";
     let buffer = null;
     let editor = null;
     let rIndent = null;
 
     beforeEach(() => {
         waitsForPromise(() =>
-            atom.workspace.open("fixture.py").then((ed) => {
+            atom.workspace.open(FILE_NAME).then((ed) => {
                 editor = ed;
                 editor.setSoftTabs(true);
                 editor.setTabLength(4);
@@ -20,7 +20,9 @@ describe("r-indent", () => {
             const packages = atom.packages.getAvailablePackageNames();
             let languagePackage;
 
-            if (packages.indexOf("language-python") > -1) {
+            if (packages.indexOf("language-r") > -1) {
+                languagePackage = "language-r";
+            } else if (packages.indexOf("language-python") > -1) {
                 languagePackage = "language-python";
             } else if (packages.indexOf("MagicPython") > -1) {
                 languagePackage = "MagicPython";
@@ -38,7 +40,7 @@ describe("r-indent", () => {
 
     describe("package", () =>
         it("loads R file and package", () => {
-            // expect(editor.getPath()).toContain("fixture.R");
+            expect(editor.getPath()).toContain(FILE_NAME);
             expect(atom.packages.isPackageActive("r-indent")).toBe(true);
         })
     );
@@ -47,120 +49,59 @@ describe("r-indent", () => {
     describe("aligned with opening delimiter", () => {
         describe("when indenting after newline", () => {
             /*
-            def test(param_a, param_b, param_c,
+            f <- function(param_a, param_b, param_c,
                              param_d):
                     pass
             */
+
             it("indents after open def params", () => {
-                editor.insertText("def test(param_a, param_b, param_c,\n");
+                editor.insertText("f <- function(param_a, param_b, param_c,\n");
                 rIndent.properlyIndent();
-                expect(buffer.lineForRow(1)).toBe(" ".repeat(9));
+                expect(buffer.lineForRow(1)).toBe(" ".repeat(14));
             });
 
             /*
-            x = [0, 1, 2,
-                     3, 4, 5]
+            x <- c(0, 1, 2,
+                   3, 4, 5)
             */
             it("indents after open bracket with multiple values on the first line", () => {
-                editor.insertText("x = [0, 1, 2,\n");
+                editor.insertText("x <- c(0, 1, 2,\n");
                 rIndent.properlyIndent();
-                expect(buffer.lineForRow(1)).toBe(" ".repeat(5));
+                expect(buffer.lineForRow(1)).toBe(" ".repeat(7));
             });
 
             /*
-            x = [0,
-                     1]
+            x <- c(0,
+                   1)
             */
             it("indents after open bracket with one value on the first line", () => {
-                editor.insertText("x = [0,\n");
+                editor.insertText("x <- c(0,\n");
                 rIndent.properlyIndent();
-                expect(buffer.lineForRow(1)).toBe(" ".repeat(5));
+                expect(buffer.lineForRow(1)).toBe(" ".repeat(7));
             });
 
             /*
-            x = [0, 1, 2, [3, 4, 5,
-                           6, 7, 8]]
+            x <- function(a, b, c, c(3, 4, 5,
+                                     6, 7, 8)
+                          )
             */
             it("indeents in nested lists when inner list is on the same line", () => {
-                editor.insertText("x = [0, 1, 2, [3, 4, 5,\n");
+                editor.insertText("x <- function(a, b, c, c(3, 4, 5,\n");
                 rIndent.properlyIndent();
-                expect(buffer.lineForRow(1)).toBe(" ".repeat(15));
+                expect(buffer.lineForRow(1)).toBe(" ".repeat(25));
             });
 
-            /*
-            x = [0, 1, 2,
-                 [3, 4, 5,
-                  6, 7, 8]]
-            */
-            it("indeents in nested lists when inner list is on a new line", () => {
-                editor.insertText("x = [0, 1, 2,\n");
+            it("indents back to opening delimiter after nested args", () => {
+                editor.insertText("x <- function(a, b, c, c(3, 4, 5,\n");
                 rIndent.properlyIndent();
-                expect(buffer.lineForRow(1)).toBe(" ".repeat(5));
+                expect(buffer.lineForRow(1)).toBe(" ".repeat(25));
 
-                editor.insertText("[3, 4, 5,\n");
+                editor.insertText("6, 7, 8)\n");
                 rIndent.properlyIndent();
-                expect(buffer.lineForRow(2)).toBe(" ".repeat(6));
+                expect(buffer.lineForRow(2)).toBe(" ".repeat(14));
             });
 
-            /*
-            x = (0, 1, 2,
-                 3, 4, 5)
-            */
-            it("indents after open tuple with multiple values on the first line", () => {
-                editor.insertText("x = (0, 1, 2,\n");
-                rIndent.properlyIndent();
-                expect(buffer.lineForRow(1)).toBe(" ".repeat(5));
-            });
 
-            /*
-            x = (0,
-                 1)
-            */
-            it("indents after open tuple with one value on the first line", () => {
-                editor.insertText("x = (0,\n");
-                rIndent.properlyIndent();
-                expect(buffer.lineForRow(1)).toBe(" ".repeat(5));
-            });
-
-            /*
-            x = (0, 1, 2, [3, 4, 5,
-                           6, 7, 8],
-                 9, 10, 11)
-            */
-            it("indents in nested lists when inner list is on a new line", () => {
-                editor.insertText("x = (0, 1, 2, [3, 4, 5,\n");
-                rIndent.properlyIndent();
-                expect(buffer.lineForRow(1)).toBe(" ".repeat(15));
-
-                editor.insertText("6, 7, 8],\n");
-                rIndent.properlyIndent();
-                expect(buffer.lineForRow(2)).toBe(" ".repeat(5));
-            });
-
-            /*
-            x = {0: 0, 1: 1,
-                 2: 2, 3: 3}
-            */
-            it("indents dictionaries when multiple pairs are on the same line", () => {
-                editor.insertText("x = {0: 0, 1: 1,\n");
-                rIndent.properlyIndent();
-                expect(buffer.lineForRow(1)).toBe(" ".repeat(5));
-            });
-
-            /*
-            x = {0: 0, 1: 1,
-                 2: 2, 3: 3, 4: [4, 4,
-                                 4, 4]}
-            */
-            it("indents dictionaries with a list as a value", () => {
-                editor.insertText("x = {0: 0, 1: 1,\n");
-                rIndent.properlyIndent();
-                expect(buffer.lineForRow(1)).toBe(" ".repeat(5));
-
-                editor.insertText("2: 2, 3: 3, 4: [4, 4,\n");
-                rIndent.properlyIndent();
-                expect(buffer.lineForRow(2)).toBe(" ".repeat(21));
-            });
 
             /*
             s = "[ will this \"break ( the parsing?"
@@ -196,15 +137,26 @@ describe("r-indent", () => {
                 expect(buffer.lineForRow(4)).toBe(" ".repeat(5));
             });
 
+            it("indents normally after function definition", () => {
+                editor.insertText("f <- function(param_a, param_b, param_c){\n");
+                rIndent.properlyIndent();
+                editor.insertText("}");
+                expect(buffer.lineForRow(1)).toBe(" ".repeat(2));
+            });
+
             /*
-            def test(param_a, param_b, param_c,
-                     param_d):
+            f <- function(param_a, param_b, param_c,
+                     param_d){
                     pass
             */
-            it("indents normally when delimiter is closed", () => {
-                editor.insertText("def test(param_a, param_b, param_c):\n");
+            it("indents normally long args in function definition", () => {
+                editor.insertText("f <- function(param_a, param_b, param_c,\n");
                 rIndent.properlyIndent();
-                expect(buffer.lineForRow(1)).toBe(" ".repeat(4));
+                expect(buffer.lineForRow(1)).toBe(" ".repeat(14));
+
+                editor.insertText("param_d){\n");
+                rIndent.properlyIndent();
+                expect(buffer.lineForRow(2)).toBe(" ".repeat(4));
             });
 
             /*
